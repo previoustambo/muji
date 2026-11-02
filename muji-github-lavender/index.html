@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#faf8ff">
+  <meta name="description" content="暮记，给每个晚上留个记录。个人晚餐日历打卡、补记与统计。">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="暮记">
+  <title>暮记 · 晚餐打卡</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="./assets/icon.svg">
+  <link rel="apple-touch-icon" href="./assets/icon-180.png">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="侧边栏">
+      <a class="brand" href="#today" aria-label="暮记首页"><span class="brand-icon" data-icon="leaf"></span><span>暮记<span class="brand-subtitle">EVENING JOURNAL</span></span></a>
+      <p class="sidebar-label">我的记录</p>
+      <nav class="desktop-nav" aria-label="主导航">
+        <a href="#today" data-page="today"><span data-icon="sun"></span>今日记录<span class="nav-dot"></span></a>
+        <a href="#calendar" data-page="calendar"><span data-icon="calendar"></span>打卡日历<span class="nav-dot"></span></a>
+        <a href="#stats" data-page="stats"><span data-icon="chart"></span>统计趋势<span class="nav-dot"></span></a>
+        <a href="#settings" data-page="settings"><span data-icon="settings"></span>设置与备份<span class="nav-dot"></span></a>
+      </nav>
+      <div class="sidebar-note"><span data-icon="sprout"></span><p>一点一滴，<br>看见生活的节奏。</p><small>每一天都值得被记录</small></div>
+      <div class="local-indicator"><i></i> 数据保存在此设备</div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <a href="#today" class="mobile-brand"><span data-icon="leaf"></span>暮记</a>
+        <div class="breadcrumb">我的生活 <span>/</span> <strong id="page-breadcrumb">今日记录</strong></div>
+        <div class="header-actions"><span class="offline-pill" id="connection-state" hidden>离线可用</span><span id="header-date"></span><a href="#settings" class="icon-button" aria-label="打开设置" data-icon="settings"></a></div>
+      </header>
+
+      <main id="main" tabindex="-1">
+        <section id="page-today" class="page" aria-labelledby="today-heading">
+          <div class="page-heading"><div><p class="eyebrow">A LITTLE MOMENT FOR YOURSELF</p><h1 id="today-heading">给每个晚上，留个记录<span>。</span></h1><p class="subtitle">不必完美，按自己的节奏来。</p></div><span class="heading-decoration" data-icon="sprout"></span></div>
+          <div class="dashboard-grid">
+            <div class="main-column">
+              <section class="today-card" aria-labelledby="record-title">
+                <div class="card-topline"><span class="pill"><i></i> 今日打卡</span><span id="today-date"></span></div>
+                <div class="today-content"><div><p class="card-kicker" id="today-kicker">把今天的状态，轻轻记下</p><h2 id="record-title">今晚吃晚饭了吗？</h2><p id="today-description">选择你的真实状态，记录就从这一刻开始。</p></div><div class="moon-art" aria-hidden="true"><div class="orb"></div><i class="star star-one">✦</i><i class="star star-two">✧</i><i class="star star-three">·</i><div class="horizon"></div></div></div>
+                <div class="record-actions"><button class="button primary" id="record-skipped"><span data-icon="moon"></span><span>未吃晚饭</span></button><button class="button secondary" id="record-ate"><span data-icon="bowl"></span><span>已吃晚饭</span></button></div>
+                <div class="today-foot"><span id="today-footnote"><span data-icon="shield"></span> 只为自己记录，随时可以修改</span><button id="edit-today" class="text-button" hidden>修改记录 <span>↗</span></button></div>
+              </section>
+
+              <section class="panel calendar-panel" aria-label="本月打卡日历">
+                <div class="section-header"><h2><span data-icon="calendar"></span>打卡日历</h2><a class="subtle-link" href="#calendar">查看全部 <span>↗</span></a></div>
+                <div id="home-calendar"></div>
+                <div class="calendar-legend"><span><i class="legend-dot skipped"></i>未吃晚饭</span><span><i class="legend-dot ate"></i>已吃晚饭</span><span><i class="legend-dot empty"></i>未记录</span><small>点日期可补记</small></div>
+              </section>
+            </div>
+
+            <div class="side-column">
+              <section class="panel streak-panel"><div class="streak-icon" data-icon="flame"></div><div><p class="small-label">连续记录</p><div class="big-number"><span id="home-streak">0</span><small>天</small></div></div><p id="streak-message">每一个记录，都是新的开始。</p><div class="week-strip" id="week-strip" aria-label="最近七天的记录"></div><div class="streak-bottom"><span>最长连续记录</span><strong><span id="home-best">0</span> 天</strong></div></section>
+              <section class="panel month-panel"><div class="section-header"><h2>这个月的小积累</h2><span class="tag" id="month-tag"></span></div><div class="monthly-primary"><span id="home-month-skipped">0</span><small>天未吃晚饭</small><span class="small-leaf" data-icon="leaf"></span></div><div class="month-progress"><span id="month-progress-fill"></span></div><p class="muted" id="month-summary"></p><div class="mini-divider"></div><div class="mini-stat"><span>累计未吃晚饭</span><strong><span id="home-total-skipped">0</span><small> 天</small></strong></div><a href="#stats" class="stats-link">看看我的统计 <span>→</span></a></section>
+              <div class="gentle-note"><span data-icon="sparkle"></span><p>生活有自己的节奏，<br>如实记录就是很好的开始。</p></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="page-calendar" class="page" aria-labelledby="calendar-heading" hidden>
+          <div class="page-heading"><div><p class="eyebrow">YOUR DAYS, AT A GLANCE</p><h1 id="calendar-heading">日子，都记在这里<span>。</span></h1><p class="subtitle">点选今天或过去的日期，补记、修改或清除记录。</p></div></div>
+          <div class="calendar-full-layout"><section class="panel calendar-panel large-calendar"><div id="full-calendar"></div><div class="calendar-legend"><span><i class="legend-dot skipped"></i>未吃晚饭</span><span><i class="legend-dot ate"></i>已吃晚饭</span><span><i class="legend-dot empty"></i>未记录</span></div></section><section class="panel month-details"><p class="eyebrow">MONTH IN REVIEW</p><h2 id="viewed-month-label"></h2><div id="viewed-month-stats"></div><p class="muted">未记录的日期会保留空白，不会自动算作任何一种晚餐状态。</p><button class="button secondary" id="calendar-today"><span data-icon="calendar"></span>回到本月</button></section></div>
+        </section>
+
+        <section id="page-stats" class="page" aria-labelledby="stats-heading" hidden>
+          <div class="page-heading"><div><p class="eyebrow">EVERY RECORD COUNTS</p><h1 id="stats-heading">看见一点点积累<span>。</span></h1><p class="subtitle">补记和修改后，统计也会一起更新。</p></div></div>
+          <div class="stats-grid" id="stats-cards"></div>
+          <div class="analytics-grid"><section class="panel"><div class="section-header"><h2>近六个月</h2><span class="muted tiny">未吃晚饭的天数</span></div><div class="bar-chart" id="bar-chart" role="img" aria-label="近六个月未吃晚饭天数"></div></section><section class="panel distribution-panel"><div class="section-header"><h2>晚餐记录分布</h2><span class="tag">全部记录</span></div><div class="donut" id="donut"><div><strong id="ratio-number">—</strong><span>未吃晚饭占比</span></div></div><div id="distribution-legend"></div><p class="muted tiny">占比 = 未吃晚饭天数 ÷ 已记录天数<br>未记录日期不计入分母。</p></section></div>
+          <section class="panel recent-panel"><div class="section-header"><h2>最近记录</h2><a class="subtle-link" href="#calendar">去补记 ↗</a></div><div id="recent-records"></div></section>
+        </section>
+
+        <section id="page-settings" class="page" aria-labelledby="settings-heading" hidden>
+          <div class="page-heading"><div><p class="eyebrow">MAKE YOURSELF AT HOME</p><h1 id="settings-heading">你的记录，你来保管<span>。</span></h1><p class="subtitle">暮记 · 一个简单的个人晚餐记录本</p></div></div>
+          <div class="settings-grid"><section class="panel install-panel"><div class="install-icon" data-icon="smartphone"></div><h2>把暮记放在手机桌面</h2><p>在 iPhone 的 Safari 中打开暮记，添加到主屏幕，就能像 App 一样点开使用。</p><ol class="install-steps"><li><span>1</span>用 Safari 打开这个页面</li><li><span>2</span>轻点分享按钮 <span class="inline-icon" data-icon="share"></span></li><li><span>3</span>选择「添加到主屏幕」</li><li><span>4</span>如有「作为网页 App 打开」，将它开启</li></ol><div class="info-box" id="install-status">首次联网打开后，等离线资源准备好再离线使用。</div><p class="muted tiny">这是主屏幕网页 App。iOS 桌面小组件需要另行开发原生版本。</p></section><div class="settings-stack"><section class="panel"><div class="section-header"><h2><span data-icon="shield"></span>数据与备份</h2><span class="tag">本机保存</span></div><p class="muted settings-copy">记录只保存在当前设备和浏览器中，尚未跨设备同步。建议定期导出备份；清理网站数据或删除网页 App 可能导致记录丢失。</p><button class="setting-row" id="export-data"><span class="setting-icon" data-icon="download"></span><span><strong>导出备份</strong><small>保存 JSON 文件，方便恢复记录</small></span><span>↗</span></button><button class="setting-row" id="import-data"><span class="setting-icon" data-icon="upload"></span><span><strong>导入备份</strong><small>从暮记的 JSON 备份恢复</small></span><span>↗</span></button><input type="file" accept="application/json,.json" id="import-file" hidden><p class="muted tiny" id="backup-note">还没有在此设备导出过备份。</p></section><section class="panel about-panel"><h2>关于记录</h2><p>「未吃晚饭」和「已吃晚饭」都是有效记录。连续记录天数统计每天有无记录；补记会重新计算。</p><p class="muted tiny">暮记只记录你的选择，不评价饮食，也不推算减重效果。</p><span class="version">暮记 1.1 · MADE FOR YOUR EVENINGS</span></section></div></div>
+        </section>
+        <footer class="page-footer"><span>暮记</span> 慢慢来，把日子记下来。<span class="footer-right">PRIVATE & LOCAL</span></footer>
+      </main>
+    </div>
+    <nav class="bottom-nav" aria-label="手机导航"><a href="#today" data-page="today"><span data-icon="sun"></span><span>今日</span></a><a href="#calendar" data-page="calendar"><span data-icon="calendar"></span><span>日历</span></a><a href="#stats" data-page="stats"><span data-icon="chart"></span><span>统计</span></a><a href="#settings" data-page="settings"><span data-icon="settings"></span><span>我的</span></a></nav>
+  </div>
+
+  <dialog id="record-dialog" aria-labelledby="dialog-title"><form method="dialog" class="dialog-content"><div class="dialog-heading"><span class="pill">晚餐记录</span><button class="icon-button" value="cancel" aria-label="关闭记录窗口" data-icon="close"></button></div><h2 id="dialog-title"></h2><p class="muted" id="dialog-description"></p><div class="dialog-options"><button type="button" data-status="skipped"><span class="option-icon" data-icon="moon"></span><span><strong>未吃晚饭</strong><small>记录今晚的晚餐状态</small></span><span class="option-check" data-icon="check"></span></button><button type="button" data-status="ate"><span class="option-icon" data-icon="bowl"></span><span><strong>已吃晚饭</strong><small>如实记下，也是记录</small></span><span class="option-check" data-icon="check"></span></button></div><button type="button" id="clear-record" class="clear-button">清除这一天的记录</button><p class="dialog-hint">保存后可以随时回来修改。</p></form></dialog>
+  <dialog id="confirm-dialog" aria-labelledby="confirm-title"><div class="dialog-content"><div class="dialog-heading"><span class="pill">恢复备份</span><button class="icon-button" id="cancel-import-x" aria-label="取消导入" data-icon="close"></button></div><h2 id="confirm-title">导入这些记录？</h2><p class="muted" id="confirm-message"></p><div class="confirm-actions"><button class="button secondary" id="cancel-import">取消</button><button class="button primary" id="confirm-import">确认替换</button></div></div></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden><span data-icon="check"></span><span id="toast-text"></span></div>
+  <noscript><p class="noscript">请开启 JavaScript 以使用暮记。你的记录保存在当前设备。</p></noscript>
+</body>
+</html>
